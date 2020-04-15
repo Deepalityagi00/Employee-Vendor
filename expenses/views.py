@@ -14,9 +14,6 @@ from expenses.serializers import (
 )
 
 
-
-
-
 class EmployeeView(GenericAPIView):
     serializer_class = EmployeeSerializer
 
@@ -87,7 +84,7 @@ class VendorView(GenericAPIView):
         serialize = self.get_serializer(instance=vendor)
         vendor_details = serialize.data
 
-        return Response({vendor_details}, status=status.HTTP_200_OK)
+        return Response(vendor_details, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         data = request.data
@@ -138,11 +135,10 @@ class ExpensesView(GenericAPIView):
                 return Response(
                     {"Details": "Doesnot Exist"}, status=status.HTTP_400_BAD_REQUEST
                 )
-
         serializer = self.get_serializer(instance=expenses, many=True)
         expenses_data = serializer.data
 
-        return Response(expenses_data, status=status.HTTP_200_OK)
+        return Response({"expenses": expenses_data}, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         data = request.data
@@ -232,14 +228,14 @@ class VendorExpensesView(GenericAPIView):
         serializer = self.get_serializer(instance=expenses, many=True)
         expenses_data = serializer.data
 
-        return Response(expenses_data, status=status.HTTP_200_OK)
+        return Response({"expenses": expenses_data}, status=status.HTTP_200_OK)
 
 
 class EmployeeExpensesView(GenericAPIView):
     serializer_class = ExpensesListSerializer
     queryset = Expense.objects.all()
 
-    def get(request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         employee_code = request.query_params.get("employee_code")
 
         if not employee_code:
@@ -259,7 +255,7 @@ class EmployeeExpensesView(GenericAPIView):
         serializer = self.get_serializer(instance=expenses, many=True)
         expenses_data = serializer.data
 
-        return Response(expenses_data, status=status.HTTP_200_OK)
+        return Response({"expenses": expenses_data}, status=status.HTTP_200_OK)
 
 
 class ExpensesListView(GenericAPIView):
@@ -295,4 +291,4 @@ class ExpensesListView(GenericAPIView):
         serializer = self.get_serializer(instance=expenses, many=True)
         expenses_data = serializer.data
 
-        return Response(expenses_data, status=status.HTTP_200_OK)
+        return Response({"expenses": expenses_data}, status=status.HTTP_200_OK)
