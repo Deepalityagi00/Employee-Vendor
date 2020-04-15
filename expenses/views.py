@@ -161,7 +161,7 @@ class ExpensesView(GenericAPIView):
             )
         if not expense_comment:
             return Response(
-                {"message": "expense comment not passed."},
+                {"message": "empty expense comment provided."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
         if not expense_done_on:
@@ -169,6 +169,7 @@ class ExpensesView(GenericAPIView):
                 {"message": "expense_done_on not passed."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
+        
         try:
             expense_done_on = datetime.strptime(expense_done_on, "%d-%b-%Y")
         except ValueError:
@@ -177,16 +178,11 @@ class ExpensesView(GenericAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if not expense_amount:
-            return Response(
-                {"message": "expense amount not passed."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
         try:
             expense_amount = int(expense_amount)
         except ValueError:
             return Response(
-                {"message": "expense amount is not in valid format."},
+                {"message": "expense amount not an integer."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
